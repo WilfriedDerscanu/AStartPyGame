@@ -1,5 +1,6 @@
 import Constants
 import random
+from Position import Position
 
 
 class Fruit:
@@ -12,10 +13,10 @@ class Fruit:
     def generate(self):
         is_overlapping = True
         while is_overlapping:
-            position = (random.randint(0, self.board.height - 1), random.randint(0, self.board.width - 1))
+            position = Position(random.randint(0, self.board.width - 1), random.randint(0, self.board.height - 1))
             is_overlapping = False
             for segment in self.snake.segments:
-                if segment.position[0] == position[0] and segment.position[1] == position[0]:
+                if segment.position.x == position.x and segment.position.y == position.y:
                     is_overlapping = True
                     break
             self.position = position

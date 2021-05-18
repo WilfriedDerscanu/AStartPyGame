@@ -6,14 +6,15 @@ import Constants
 from Board import Board
 from Snake import Snake
 from Fruit import Fruit
+from Position import Position
 
 
 def generate_mat(gen_board, gen_snake, gen_fruit):
     mat = numpy.zeros((gen_board.height, gen_board.width))
     for segment in gen_snake.segments:
-        mat[segment.position[0], segment.position[1]] = -1  # wall
-    mat[gen_snake.segments[0].position[0], gen_snake.segments[0].position[1]] = 1  # start
-    mat[gen_fruit.position[0], gen_fruit.position[1]] = 2  # end
+        mat[segment.position.y, segment.position.x] = -1  # wall
+    mat[gen_snake.segments[0].position.y, gen_snake.segments[0].position.y] = 1  # start
+    mat[gen_fruit.position.y, gen_fruit.position.x] = 2  # end
     return mat
 
 
@@ -29,7 +30,7 @@ fruit = Fruit(board, snake)
 clock = pygame.time.Clock()
 
 running = True
-direction = (0, -1)
+direction = Position(0, -1)
 while running:
     clock.tick(6)
     for event in pygame.event.get():
@@ -37,20 +38,18 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                direction = (0, -1)
+                direction = Position(-1, 0)
             elif event.key == pygame.K_DOWN:
-                direction = (0, 1)
+                direction = Position(1, 0)
             elif event.key == pygame.K_LEFT:
-                direction = (-1, 0)
+                direction = Position(0, -1)
             elif event.key == pygame.K_RIGHT:
-                direction = (1, 0)
+                direction = Position(0, 1)
 
     screen.fill((0, 0, 0))
 
     snake.update(direction, fruit)
     snake.draw()
     fruit.draw()
-
-    print(generate_mat(board, snake, fruit))
 
     pygame.display.update()
